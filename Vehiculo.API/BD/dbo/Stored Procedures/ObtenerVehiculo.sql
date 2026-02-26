@@ -3,9 +3,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE ObtenerVehiculos
+CREATE PROCEDURE ObtenerVehiculo
 	-- Add the parameters for the stored procedure here
-	
+	@Id uniqueidentifier
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -17,4 +17,5 @@ BEGIN
 	FROM            Vehiculo INNER JOIN
 							 Modelos ON Vehiculo.IdModelo = Modelos.Id INNER JOIN
 							 Marcas ON Modelos.IdMarca = Marcas.Id
+	WHERE        (Vehiculo.Id = @Id)
 END
