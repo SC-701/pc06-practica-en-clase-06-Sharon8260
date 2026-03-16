@@ -1,9 +1,4 @@
-﻿-- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE PROCEDURE EliminarVehiculo
+﻿CREATE PROCEDURE EliminarVehiculos
 	-- Add the parameters for the stored procedure here
 	@Id uniqueidentifier
 AS
@@ -15,8 +10,8 @@ BEGIN
     -- Insert statements for procedure here
 	BEGIN TRANSACTION
 		DELETE
-		FROM            Vehiculo
-		WHERE        (Id = @Id)
+		FROM     Vehiculo 
+		WHERE  (Id = @Id)
 		SELECT @Id
 	COMMIT TRANSACTION
 END

@@ -1,11 +1,6 @@
 ﻿using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Interfaces.Servicios;
-using Abstracciones.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Abstracciones.Modelos.Servicios.Revision;
 
 namespace Reglas
 {
@@ -16,34 +11,32 @@ namespace Reglas
 
         public RevisionReglas(IRevisionServicio revisionServicio, IConfiguracion configuracion)
         {
-            this._revisionServicio = revisionServicio;
+            _revisionServicio = revisionServicio;
             _configuracion = configuracion;
         }
 
         public async Task<bool> RevisionEsValida(string placa)
         {
-            var resultadoRevision = await _revisionServicio.Obtener(placa);            
-
-            if (resultadoRevision != null &&resultadoRevision != null && ValidarEstado(resultadoRevision) && ValidarPeriodo(resultadoRevision))
+            var resultadoRevision = await _revisionServicio.Obtener(placa);
+            if(ValidarEstado(resultadoRevision) && ValidarPeriodo(resultadoRevision.Periodo))
                 return true;
             return false;
+
         }
+
+
         private bool ValidarEstado(Revision resultadoRevision)
         {
-            string estadoRevisionValida = _configuracion.ObtenerValor("EstadoRevisionSatisfactorio");
-            return resultadoRevision.Resultado == estadoRevisionValida;
+            string estadoRevision = _configuracion.ObtenerValor("EstadoRevisionSatisfactorio");
+            return resultadoRevision.Resultado == estadoRevision;
+        }
+        private static string ObtenerPeriodoActual() { 
+            return $"{DateTime.Now.Month}-{DateTime.Now.Year}";
         }
 
-        private static bool ValidarPeriodo(Revision resultadoRevision)
-        {
-            string periodoactual = ObtenerPeriodoActual();
-            return resultadoRevision.Periodo == periodoactual;
-        }
-
-        private static string ObtenerPeriodoActual()
-        {
-            var periodoactual = $"{DateTime.Now.Month}-{DateTime.Now.Year}";
-            return periodoactual;
+        private static bool ValidarPeriodo(string periodo) {
+        var periodoActual = ObtenerPeriodoActual();
+            return periodo == periodoActual;
         }
     }
 }
